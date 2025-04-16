@@ -1,14 +1,18 @@
 <template>
-    <v-container class="my-16">
+    <v-container class="my-3" md="my-3">
         <v-row class="fill-height">
             <v-col>
                 <v-sheet height="64">
 
-                    <v-toolbar flat color="white" class="move-toolbar ">
-                        <v-btn color="primary" dark class="mr-4 w-100 d-block d-md-inline-block" @click="dialog = true"
-                            md="12">
-                            Agregar
-                        </v-btn>
+
+                    <v-btn tile outlined color="teal" @click="dialog = true" md="12" class="rounded-lg pa-5">
+                        <v-icon left>
+                            mdi-plus
+                        </v-icon>
+                        Agregar
+                    </v-btn>
+                    <v-toolbar flat color="white" class="move-toolbar  ">
+
                         <v-btn outlined class="" @click="setToday">
                             Hoy
                         </v-btn>
@@ -49,13 +53,12 @@
                     <v-calendar ref="calendar" v-model="focus" color="primary" :events="events"
                         :event-color="getEventColor" :event-margin-bottom="3" :now="today" :type="type"
                         @click:event="showEvent" @click:more="viewDay" @click:date="viewDay" @change="updateRange"
-                        :weekdays="[1, 2, 3, 4, 5, 6, 0]" locale="es" :short-weekdays="false"></v-calendar>
+                        :weekdays="[1, 2, 3, 4, 5, 6, 0]" locale="es" :short-weekdays="false" class="mt-6"></v-calendar>
 
                     <v-dialog v-model="dialog" max-width="600">
                         <v-card>
                             <v-container>
                                 <v-form @submit.prevent="addEvent" class="ma-5">
-
                                     <h2 class="my-3">Agregar Evento</h2>
 
                                     <v-text-field type="text" label="Nombre" hint="Nombre de la evento" v-model="name"
@@ -66,22 +69,50 @@
                                         hint="Fecha de inicio de la event" v-model="start" outlined></v-text-field>
                                     <v-text-field type="date" :min="minStartDate" label="Fecha fin"
                                         hint="Fecha de fin de la event" v-model="end" outlined></v-text-field>
-                                    <v-text-field type="color" label="Color" hint="Selecciona el color de la event"
-                                        v-model="color" outlined></v-text-field>
 
-                                        
+                                    <div class="mb-4">
+                                        <label class="v-label theme--light">Color</label>
+                                        <div class="d-flex align-center mt-1">
+                                            <v-menu v-model="showColorPicker" :close-on-content-click="false" offset-y>
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <div class="d-flex align-center">
+                                                        <div :style="{ backgroundColor: color, width: '40px', height: '40px', borderRadius: '4px', border: '1px solid #ccc' }"
+                                                            class="mr-2" v-bind="attrs" v-on="on"></div>
+                                                        <v-btn outlined small v-bind="attrs" v-on="on">
+                                                            Seleccionar color
+                                                        </v-btn>
+                                                    </div>
+                                                </template>
+                                                <v-card>
+                                                    <v-color-picker v-model="color" dot-size="25"
+                                                        swatches-max-height="200" class="ma-2"></v-color-picker>
+                                                    <v-card-actions>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn text color="primary" @click="showColorPicker = false">
+                                                            Seleccionar
+                                                        </v-btn>
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </v-menu>
+                                        </div>
+                                    </div>
+
                                     <v-row dense class="mt-4">
+                                      
+                                        
+
                                         <v-col cols="12" sm="6">
-                                            <v-btn block color="primary" type="submit">
+                                            <v-btn block  outlined type="button" @click="dialog = false" class="rounded-lg">
+                                                Cancelar
+                                            </v-btn>
+                                        </v-col>
+
+                                        <v-col cols="12" sm="6">
+                                            <v-btn block  color="teal" type="submit" dark class="rounded-lg">
                                                 Agregar
                                             </v-btn>
                                         </v-col>
 
-                                        <v-col cols="12" sm="6">
-                                            <v-btn block color="secondary" type="button" @click="dialog = false">
-                                                Cancelar
-                                            </v-btn>
-                                        </v-col>
                                     </v-row>
                                 </v-form>
                             </v-container>
@@ -121,9 +152,33 @@
                                     <v-text-field type="date" :min="minStartDate" label="Fecha fin"
                                         hint="Fecha de fin de la event" v-model="selectedEvent.end"
                                         outlined></v-text-field>
-                                    <v-text-field type="color" label="Color" hint="Selecciona el color de la event"
-                                        v-model="selectedEvent.color" outlined></v-text-field>
 
+                                    <div class="mb-4">
+                                        <label class="v-label theme--light">Color</label>
+                                        <div class="d-flex align-center mt-1">
+                                            <v-menu v-model="showColorPicker" :close-on-content-click="false" offset-y>
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <div class="d-flex align-center">
+                                                        <div :style="{ backgroundColor: selectedEvent.color, width: '40px', height: '40px', borderRadius: '4px', border: '1px solid #ccc' }"
+                                                            class="mr-2" v-bind="attrs" v-on="on"></div>
+                                                        <v-btn outlined small v-bind="attrs" v-on="on">
+                                                            Seleccionar color
+                                                        </v-btn>
+                                                    </div>
+                                                </template>
+                                                <v-card>
+                                                    <v-color-picker v-model="selectedEvent.color" dot-size="25"
+                                                        swatches-max-height="200" class="ma-2"></v-color-picker>
+                                                    <v-card-actions>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn text color="primary" @click="showColorPicker = false">
+                                                            Seleccionar
+                                                        </v-btn>
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </v-menu>
+                                        </div>
+                                    </div>
                                 </v-form>
 
                             </v-card-text>
@@ -133,22 +188,21 @@
                                 <v-btn text color="secondary" @click="cancelSendInfo">
                                     Cancelar
                                 </v-btn>
-                                <v-btn text v-if="currentlyEditing !== selectedEvent.id"
-                                    @click.prevent="editEvent(selectedEvent)" color="primary">Editar</v-btn>
+                                <v-btn title v-if="currentlyEditing !== selectedEvent.id"
+                                    @click.prevent="editEvent(selectedEvent)" outlined color="teal">Editar</v-btn>
 
-                                <v-btn text v-else @click.prevent="updateEvent(selectedEvent)" color="primary">Guardar
+
+                                <v-btn title v-else @click.prevent="updateEvent(selectedEvent)" outlined
+                                    color="teal">Guardar
                                     Cambios</v-btn>
+
+
                             </v-card-actions>
                         </v-card>
-
-
                     </v-menu>
                 </v-sheet>
             </v-col>
         </v-row>
-        <v-alert v-model="openAlert" :type="typeError" :color="colorAlert" elevation="8" max-width="300px">
-            {{ infoAlert }}
-        </v-alert>
     </v-container>
 </template>
 
@@ -181,10 +235,8 @@ export default {
         color: '#1976D2',
         dialog: false,
         currentlyEditing: null,
-        openAlert: false,
-        infoAlert: '',
-        typeError: 'error',
-        colorAlert: 'red'
+        showColorPicker: false
+
     }),
     computed: {
         minStartDate() {
@@ -224,52 +276,48 @@ export default {
             this.selectedOpen = false,
                 this.currentlyEditing = null
         },
-        async updateInfoAlerts(info, type, color) {
-            this.openAlert = true;
-            this.infoAlert = info
-            this.typeError = type,
-                this.colorAlert = color
 
-            setTimeout(() => {
-                this.openAlert = false;
-            }, 5000);
-        },
         async getEvents() {
             try {
                 this.events = await getEvents()
             } catch (error) {
-                this.updateInfoAlerts(
-                    'Ha ocurrido un error al traer los datos',
-                    'error',
-                    'red'
-                );
+                this.$toasted.error("Error al intentar traer los eventos" + error, {
+                    icon: 'error',
+                });
             }
         },
         validateDates(startDaterec, endDaterec) {
+
             const today = new Date()
             const todayString = today.toISOString().split('T')[0]
-
             const startDate = startDaterec
             const endDate = endDaterec
-
             if (
                 startDate < todayString ||
                 endDate < todayString ||
                 endDate < startDate
             ) {
-                this.updateInfoAlerts(
-                    'Revisa que las fechas sean correctas',
-                    'warning',
-                    'orange'
-                )
+                this.$toasted.error("Revisa que las fechas sean correctas", {
+                    icon: 'error',
+                });
 
-                console.log("joa", startDate + endDate + today)
                 return false;
             }
             return true;
+
         },
+
+        limpiarCampos() {
+            this.name = null
+            this.details = null
+            this.start = null
+            this.end = null
+            this.color = '#1976D2'
+        },
+
         async addEvent() {
             try {
+
                 if (this.name && this.start && this.end) {
                     var responseValidate = this.validateDates(this.start, this.end)
                     if (responseValidate) {
@@ -280,38 +328,29 @@ export default {
                             end: this.end,
                             color: this.color
                         })
-                        this.getEvents()
-                        this.name = null
-                        this.details = null
-                        this.start = null
-                        this.end = null
-                        this.color = '#1976D2'
-                        this.updateInfoAlerts(
-                            'Guardado exitosamente',
-                            'success',
-                            'green'
-                        );
+                        this.getEvents();
+                        this.limpiarCampos();
+
+                        this.$toasted.success("Evento creado exitosamente", {
+                            icon: 'check',
+                        });
                         this.dialog = false;
                     }
                 } else {
-                    this.updateInfoAlerts(
-                        'los campos son obligatorios',
-                        'warning',
-                        'orange'
-                    );
+                    this.$toasted.error("los campos de nombre y fechas son ", {
+                        icon: 'error',
+                    });
                 }
             } catch (error) {
-                this.updateInfoAlerts(
-                    'Error al guardar en firebase' + error,
-                    'error',
-                    'red'
-                );
+                this.$toasted.error("Error al guardar en firebase" + error, {
+                    icon: 'error',
+                });
             }
         },
         async updateEvent(ev) {
-            try {
+
+            if (this.selectedEvent.name && this.selectedEvent.start && this.selectedEvent.end) {
                 const responseValidate = this.validateDates(ev.start, ev.end);
-                console.log("inicio", ev.start, "fin", ev.end);
 
                 if (responseValidate) {
                     await updateEvent(ev.id, {
@@ -324,57 +363,50 @@ export default {
 
                     this.selectedOpen = false;
                     this.currentlyEditing = null;
+                    this.getEvents();
+                    this.$toasted.success("Actualizado exitosamente", {
+                        icon: 'check',
+                    });
 
-                    this.updateInfoAlerts(
-                        'Actualizado exitosamente',
-                        'success',
-                        'green'
-                    );
                 } else {
-                    this.selectedEvent = JSON.parse(JSON.stringify(this.originalEvent));
+                    this.selectedEvent.start = JSON.parse(JSON.stringify(this.originalEvent.start));
+                    this.selectedEvent.end = JSON.parse(JSON.stringify(this.originalEvent.end));
+
                     this.getEvents()
-                    this.updateInfoAlerts(
-                        'Fechas      inválidas. Se restauraron los valores originales.',
-                        'warning',
-                        'orange'
-                    ); 
+                    this.$toasted.error("Fechas inválidas. Se restauraron los valores originales.", {
+                        icon: 'error',
+                    });
                 }
-            } catch (error) {
-                this.updateInfoAlerts(
-                    'Error al actualizar en firebase: ' + error,
-                    'error',
-                    'red'
-                );
+            } else {
+                this.$toasted.error("los campos de nombre y fechas son obligatorios", {
+                    icon: 'error',
+                });
             }
+
+
         },
 
-
         editEvent(select) {
-            // Clonamos el evento original para poder restaurarlo después si es necesario
             this.originalEvent = JSON.parse(JSON.stringify(select));
             this.currentlyEditing = select.id;
         },
+
         async deleteEvent(ev) {
             try {
                 await deleteEvent(ev.id)
                 this.selectedOpen = false
                 this.getEvents()
 
-                this.updateInfoAlerts(
-                    'Eliminado exitosamente',
-                    'success',
-                    'green'
-                );
+                this.$toasted.success("Eliminado exitosamente", {
+                    icon: 'check',
+                });
             } catch (error) {
-
-
-                this.updateInfoAlerts(
-                    'Error al Eliminar en firebase',
-                    'error',
-                    'red'
-                );
+                this.$toasted.error("Error al Eliminar en firebase" + error, {
+                    icon: 'error',
+                });
             }
         },
+
         viewDay({ date }) {
             this.focus = date
             this.type = 'day'

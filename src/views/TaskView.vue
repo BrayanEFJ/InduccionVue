@@ -16,9 +16,9 @@ export default {
         <v-main>
             <GreetingComponent />
             <v-card flat class="my-2">
-                <v-tabs color="deep-purple accent-4" left>
+                <v-tabs color="teal " left>
                     <v-tab>Tabla</v-tab>
-                    <v-tab>Drag</v-tab>
+                    <v-tab>News 👀</v-tab>
                     <v-tab-item>
                         <ListComponent />
                     </v-tab-item>
