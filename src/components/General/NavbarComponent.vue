@@ -13,7 +13,7 @@
                             <v-list-item-icon>
                                 <v-icon>mdi-view-dashboard-outline</v-icon>
                             </v-list-item-icon>
-                            <v-list-item-title>Dashboard</v-list-item-title>
+                            <v-list-item-title>To do</v-list-item-title>
                         </v-list-item>
                     </router-link>
 
